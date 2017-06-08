@@ -1,2 +1,4 @@
-# History
-Created this project in 2017 as  part of my endeavors to better learn Python. 
+# [Changelog]
+
+## v0.0.3  _20170608_
+Initial Github publish. 
