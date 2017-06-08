@@ -1,0 +1,63 @@
+
+    #left_column,#right_column {
+        width:48%;
+        display:block;
+        float:left;
+    }
+    #data_entry_form {
+        display:block;
+        float:left;
+        margin:5px;
+        padding:10px;
+        width:95%;
+        border:1px solid green;
+    }
+    #result_area {
+        display:block;
+        float:left;
+        width:100%;
+        padding:10px;
+        margin:5px;
+        border:1px solid orange;
+    }
+    #example_area {
+        display:block;
+        float:left;
+        width:95%;
+        padding:10px;
+        margin:5px;
+        border:1px solid purple;
+        clear:both;
+
+    }
+    #ajax_controls {
+        text-align:center;
+        display:block;
+        height:60px;
+    }
+    #ajax_controls a {
+        border: 1px solid gray;
+        padding:4px 50px;
+        background:lightgray;
+        float:left;
+        margin:20px 10px;
+    }
+    #radio-paste-fieldset{
+        width:150px;
+        height:30px;
+        float:left;
+        text-align:center;
+        clear:left;
+    }
+    #header_data_entry {
+        width:100px;
+        padding-left:10px;
+        float:left;
+    }
+    #lab_form {
+        margin:20px 50px;
+        float:left;
+    }
+    #error_message {
+        color:red;
+    }

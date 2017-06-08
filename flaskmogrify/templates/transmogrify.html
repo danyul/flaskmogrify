@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="left_column">
+        <form action="" method="post" id="data_entry_form" name="login">
+          {{ form.hidden_tag() }}
+
+          <h3 id="header_data_entry">Enter Data:</h3>
+
+          {{ form.data_to_transmogrify_field(cols="50",rows="5",id="data_entry_field") }}
+          {% for error in form.data_to_transmogrify_field.errors %}
+            <span id="error_message">[{{ error }}]</span>
+          {% endfor %}
+
+          <div id="ajax_controls" style="display:none;">
+
+              <fieldset id="radio-paste-fieldset">
+                <legend>Submit text on paste?</legend>
+                <label for="radio-paste-yes">Yes</label>
+                <input checked="checked" type="radio" name="radio-paste" value="Yes" id="radio-paste-yes">
+                <label for="radio-paste-no">No</label>
+                <input type="radio" name="radio-paste" value="No" id="radio-paste-no">
+              </fieldset>
+
+              <a id = "submit_link" href="#">Submit</a>
+              <a id = "clear_link"  href="#">Clear</a>
+              <a id = "test_link"  href="#">Test</a>
+
+          </div>
+
+          <div id="loading_display_text" style="display: none" >Loading...</div>
+
+          <input id="submit_button" type="submit" value="Submit">
+
+        </form>
+
+        <div id="example_area">
+            <h3>Example Text:</h3>
+            <pre>{{ example_text }}</pre>
+        </div>
+
+    </div>
+
+    <div id="right_column">
+        <div id="result_area" >
+             <h3>Results:</h3>
+             <pre id="translation_area"></pre>
+        </div>
+    </div>
+
+
+    <script>
+
+        function translate(text_to_translate) {
+            $('#loading').show();
+            $.post('/get_transmogrification_by_ajax', {
+                text: text_to_translate
+            }).done(function (translated) {
+                $('#translation_area').text(translated['text'])
+                $('#loading').show();
+                 $('#loading').hide();
+            }).fail(function () {
+                $('#translation_area').text("Error: Could not contact server.");
+                $('#loading').hide();
+            });
+        }
+
+        function test_click_button() {
+            alert("testing!");
+            var radioValue = $("input[name='radio-paste']:checked").val();
+            if(radioValue){ alert("Your are a - " + radioValue); }
+        }
+
+        function clear_data_entry_and_result_areas() {
+            $('#data_entry_field').val('');
+            $('#translation_area').text('');
+        }
+
+
+
+        $(function() {
+             $("#data_entry_field").bind("paste", function(e){
+                var radioValue = $("input[name='radio-paste']:checked").val();
+                if (radioValue == "Yes") {
+                    var pastedData = e.originalEvent.clipboardData.getData('text');
+                    translate(pastedData);
+                }
+            });
+            $("#data_entry_field").focus(function() {  // from https://stackoverflow.com/questions/5797539/jquery-select-all-text-from-a-textarea
+                var $this = $(this);
+                $this.select();
+                $this.mouseup(function() {   // "Work around Chrome's little problem"
+                    $this.unbind("mouseup"); // "Prevent further mouseup intervention"
+                    return false;
+                });
+            });
+            $('#submit_button').hide();
+            $('#submit_link' ).click(function() {
+                translate($('#data_entry_field').val());
+            });
+            $('#test_link' ).click(function() {
+                test_click_button();
+            });
+            $('#clear_link' ).click(function() {
+                clear_data_entry_and_result_areas();
+            });
+            $('#ajax_controls').show();
+            $('#test_link').hide();
+        })
+    </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,32 @@
+<html>
+
+  <head>
+
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Lab Magic Parser</title>
+    {% endif %}
+
+    <script src="/static/jquery-3.2.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+
+  </head>
+
+  <body>
+
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li><pre>{{ message }}</pre></li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+
+  </body>
+
+</html>
