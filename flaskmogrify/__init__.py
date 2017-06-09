@@ -1,5 +1,4 @@
 from flask import Flask, request, redirect, render_template, flash, jsonify
-import flaskmogrify.flaskmogrify_config
 from flaskmogrify.forms import TransmogrificationForm
 
 __author__ = 'Daniel Langsam'
@@ -16,7 +15,7 @@ app.config.update(dict(
 
 @app.route('/get_transmogrification_by_ajax', methods=['POST'])
 def ajax_transmogrify():
-    return jsonify({ 'text': flaskmogrify.flaskmogrify_config.TRANSMOGRIFY_FUNCTION(request.form['text'])})
+    return jsonify({ 'text': TRANSMOGRIFY_FUNCTION(request.form['text'])})
 
 @app.route('/transmogrify', methods=['GET','POST'])
 def transmogrify_main():
@@ -24,10 +23,10 @@ def transmogrify_main():
     if form.validate_on_submit(): # non-AJAX fallback, e.g. if Javascript disabled
         flash("Transmogrification complete!")
         return render_template('/results_by_GET.html',
-            display_text = flaskmogrify.flaskmogrify_config.TRANSMOGRIFY_FUNCTION(form.data_to_transmogrify_field.data))
+            display_text = TRANSMOGRIFY_FUNCTION(form.data_to_transmogrify_field.data))
     return render_template('transmogrify.html',
                            title="Lab Data Entry",
-                           form=form, example_text=flaskmogrify.flaskmogrify_config.EXAMPLE_TEXT)
+                           form=form, example_text=EXAMPLE_TEXT)
 
 @app.route('/')
 def redirect_to_transmogrify_main():
