@@ -1,11 +1,7 @@
 import flaskmogrify
 
-def func(text):
-    transmogrification_result = text[::-1]
-    return transmogrification_result
-
-flaskmogrify.TRANSMOGRIFY_FUNCTION = func
-flaskmogrify.EXAMPLE_TEXT =  "Lorum ipsum dolor sit amet.  Copy-paste me into the text box and I'll be reversed.)"
+flaskmogrify.app.config['transmogrify_function'] = lambda x: x[::-1]
+flaskmogrify.app.config['sample_text'] =  "Lorum ipsum dolor. Copy-paste me into the textbox and I'll be reversed.)"
 
 if __name__ == '__main__':
     flaskmogrify.app.run(debug=True)
