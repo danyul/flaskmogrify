@@ -3,7 +3,7 @@ from flaskmogrify.forms import TransmogrificationForm
 
 __author__ = 'Daniel Langsam'
 __email__ = 'daniel@langsam.org'
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 app = Flask(__name__)
 app.config.from_object(__name__)

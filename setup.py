@@ -50,5 +50,5 @@ setup(
         "dev": dev_requirements
         },
     test_suite='tests',
-    tests_require=test_requirements,
+    tests_require=[].extend(test_requirements),
 )
