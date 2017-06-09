@@ -1,0 +1,2 @@
+recursive-include flaskmogrify/templates *
+recursive-include flaskmogrify/static *
