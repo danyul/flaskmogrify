@@ -3,7 +3,7 @@ from flaskmogrify.forms import TransmogrificationForm
 
 __author__ = 'Daniel Langsam'
 __email__ = 'daniel@langsam.org'
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -25,7 +25,7 @@ def transmogrify_main():
             display_text = app.config['transmogrify_function'](form.data_to_transmogrify_field.data))
     return render_template('transmogrify.html',
                            title="Lab Data Entry",
-                           form=form, example_text=app.config['sample_text'])
+                           form=form, example_text=app.config['transmogrify_sample_text'])
 
 @app.route('/')
 def redirect_to_transmogrify_main():
