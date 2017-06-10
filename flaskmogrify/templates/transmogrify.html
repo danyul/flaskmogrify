@@ -35,8 +35,9 @@
               <fieldset id="radio-tfunction-fieldset">
                 <legend>Function to use:</legend>
                   {% for tfunc in tfuncs %}
-                  <input type="radio" name="radio-tfunction" value="{{tfunc}}" id="radio-tfunction-xyz">
-                  <label for="radio-tfunction-xyz">{{tfunc.__name__}}</label>
+                  <input {% if loop.index == 1 %} checked="checked"{% endif %}
+                        type="radio" name="radio-tfunction" value="{{ loop.index }}" id="radio-tfunction-{{ loop.index }}">
+                  <label for="radio-tfunction-{{ loop.index }}">{{ loop.index }}. {{tfunc.__name__}}</label>
                   <br />
                   {% endfor %}
               </fieldset>
@@ -68,7 +69,8 @@
         function translate(text_to_translate) {
             $('#loading').show();
             $.post('/get_transmogrification_by_ajax', {
-                text: text_to_translate
+                text: text_to_translate,
+                tfunction_index: $('input[name=radio-tfunction]:checked').val()-1
             }).done(function (translated) {
                 $('#translation_area').text(translated['text'])
                 $('#loading').show();

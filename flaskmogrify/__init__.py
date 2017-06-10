@@ -14,7 +14,9 @@ app.config.update(dict(
 
 @app.route('/get_transmogrification_by_ajax', methods=['POST'])
 def ajax_transmogrify():
-    return jsonify({ 'text': app.config['transmogrify_functions'][0](request.form['text'])})
+    tfunction_index = int(request.form['tfunction_index'])
+    return jsonify({ 'text': app.config['transmogrify_functions'][tfunction_index](request.form['text'])})
+
 
 @app.route('/transmogrify', methods=['GET','POST'])
 def transmogrify_main():
