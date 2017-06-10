@@ -1,8 +1,14 @@
 import flaskmogrify
 
-flaskmogrify.app.config['transmogrify_function'] = lambda x: x[::-1]
+flaskmogrify.app.config['transmogrify_functions'] = [
+    lambda x: x[::-1],
+    lambda x: "X"+x+"X"
+]
+flaskmogrify.app.config['transmogrify_functions'][0].__name__ = "reversal"
+flaskmogrify.app.config['transmogrify_functions'][1].__name__ = "x_on_both_sides"
+
 flaskmogrify.app.config['transmogrify_sample_text'] =  \
     "Lorum ipsum dolor. Copy-paste me into the textbox and I'll be reversed.)"
 
 if __name__ == '__main__':
-    flaskmogrify.app.run(debug=True)
+    flaskmogrify.app.run(debug=True,port=5001)

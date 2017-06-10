@@ -12,20 +12,34 @@
             <span id="error_message">[{{ error }}]</span>
           {% endfor %}
 
-          <div id="ajax_controls" style="display:none;">
+          <div id="ajax_controls" style="display:none;clear:both;">
 
               <fieldset id="radio-paste-fieldset">
                 <legend>Submit text on paste?</legend>
-                <label for="radio-paste-yes">Yes</label>
                 <input checked="checked" type="radio" name="radio-paste" value="Yes" id="radio-paste-yes">
-                <label for="radio-paste-no">No</label>
+                <label for="radio-paste-yes">Yes</label>
                 <input type="radio" name="radio-paste" value="No" id="radio-paste-no">
+                <label for="radio-paste-no">No</label>
               </fieldset>
+
 
               <a id = "submit_link" href="#">Submit</a>
               <a id = "clear_link"  href="#">Clear</a>
               <a id = "test_link"  href="#">Test</a>
 
+          </div>
+
+
+          <div id="function_chooser" style="clear:both;">
+
+              <fieldset id="radio-tfunction-fieldset">
+                <legend>Function to use:</legend>
+                  {% for tfunc in tfuncs %}
+                  <input type="radio" name="radio-tfunction" value="{{tfunc}}" id="radio-tfunction-xyz">
+                  <label for="radio-tfunction-xyz">{{tfunc.__name__}}</label>
+                  <br />
+                  {% endfor %}
+              </fieldset>
           </div>
 
           <div id="loading_display_text" style="display: none" >Loading...</div>
