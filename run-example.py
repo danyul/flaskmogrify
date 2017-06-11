@@ -1,11 +1,14 @@
 import flaskmogrify
 
+def x_on_both_sides(x:str) ->str:
+    return "X"+x+"X"
+
 flaskmogrify.app.config['transmogrify_functions'] = [
     lambda x: x[::-1],
-    lambda x: "X"+x+"X"
+    x_on_both_sides
 ]
+
 flaskmogrify.app.config['transmogrify_functions'][0].__name__ = "reversal"
-flaskmogrify.app.config['transmogrify_functions'][1].__name__ = "x_on_both_sides"
 
 flaskmogrify.app.config['transmogrify_sample_text'] =  \
     "Lorum ipsum dolor sit amet. Copy-paste me into the textbox."

@@ -1,130 +1,120 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <div id="left_column">
-        <form action="" method="post" id="data_entry_form" name="login">
-          {{ form.hidden_tag() }}
+<div id="left_column">
+    <form action="/get_transmogrification" method="post" id="data_entry_form" name="login">
+        {{ form.hidden_tag() }}
 
-          <h3 id="header_data_entry">Enter Data:</h3>
+        <h3 id="header_data_entry">Enter Data:</h3>
 
-          {{ form.data_to_transmogrify_field(cols="50",rows="5",id="data_entry_field") }}
-          {% for error in form.data_to_transmogrify_field.errors %}
-            <span id="error_message">[{{ error }}]</span>
-          {% endfor %}
+        {{ form.data_to_transmogrify_field(cols="50",rows="5",id="data_entry_field") }}
+        {% for error in form.data_to_transmogrify_field.errors %}
+        <span id="error_message">[{{ error }}]</span>
+        {% endfor %}
 
-          <div id="ajax_controls" style="display:none;clear:both;">
+        <div id="function_chooser" style="clear:both;margin-bottom:20px;margin-top:30px;">
+              <fieldset id="radio_tfunction_fieldset">
+                    <legend>Function to use:</legend>
+                    {% for tfunc in form.radio_choices.choices %}
+                    <input {% if loop.index == 1 %} checked="checked"{% endif %}
+                        type="radio" name="radio_tfunction" value="{{ loop.index - 1 }}" id="radio_tfunction_{{ loop.index }}">
+                    <label for="radio_tfunction_{{ loop.index }}">{{ loop.index }}. {{tfunc}}</label>
+                    <br />
+                    {% endfor %}
+              </fieldset>
+        </div>
 
-              <fieldset id="radio-paste-fieldset">
+
+        <div id="ajax_controls"">
+
+            <fieldset id="radio_paste_fieldset">
                 <legend>Submit text on paste?</legend>
-                <input checked="checked" type="radio" name="radio-paste" value="Yes" id="radio-paste-yes">
-                <label for="radio-paste-yes">Yes</label>
-                <input type="radio" name="radio-paste" value="No" id="radio-paste-no">
-                <label for="radio-paste-no">No</label>
-              </fieldset>
+                <input checked="checked" type="radio" name="radio_paste" value="Yes" id="radio_paste_yes">
+                <label for="radio_paste_yes">Yes</label>
+                <input type="radio" name="radio_paste" value="No" id="radio_paste_no">
+                <label for="radio_paste_no">No</label>
+            </fieldset>
 
 
-              <a id = "submit_link" href="#">Submit</a>
-              <a id = "clear_link"  href="#">Clear</a>
-              <a id = "test_link"  href="#">Test</a>
+            <a id="submit_link" href="#">Submit</a>
+            <a id="clear_link" href="#">Clear</a>
+            <a id="test_link" href="#">Test</a>
 
-          </div>
-
-
-          <div id="function_chooser" style="clear:both;">
-
-              <fieldset id="radio-tfunction-fieldset">
-                <legend>Function to use:</legend>
-                  {% for tfunc in tfuncs %}
-                  <input {% if loop.index == 1 %} checked="checked"{% endif %}
-                        type="radio" name="radio-tfunction" value="{{ loop.index }}" id="radio-tfunction-{{ loop.index }}">
-                  <label for="radio-tfunction-{{ loop.index }}">{{ loop.index }}. {{tfunc.__name__}}</label>
-                  <br />
-                  {% endfor %}
-              </fieldset>
-          </div>
-
-          <div id="loading_display_text" style="display: none" >Loading...</div>
-
-          <input id="submit_button" type="submit" value="Submit">
-
-        </form>
-
-        <div id="example_area">
-            <h3>Sample Text:</h3>
-            <pre>{{ example_text }}</pre>
         </div>
 
+
+        <div id="loading_display_text" style="display: none">Loading...</div>
+
+        <input id="submit_button" type="submit" value="Submit">
+
+    </form>
+
+    <div id="example_area">
+        <h3>Sample Text:</h3>
+        <pre>{{ example_text }}</pre>
     </div>
 
-    <div id="right_column">
-        <div id="result_area" >
-             <h3>Results:</h3>
-             <pre id="translation_area"></pre>
-        </div>
+</div>
+
+<div id="right_column">
+    <div id="result_area">
+        <h3>Results:</h3>
+        <pre id="translation_area"></pre>
     </div>
+</div>
 
 
-    <script>
+<script>
 
-        function translate(text_to_translate) {
+    function translate(text_to_translate) {
+        $('#loading').show();
+        $.post('/get_transmogrification_by_ajax', {
+            text: text_to_translate,
+            tfunction_index: $('input[name=radio_tfunction]:checked').val()
+        }).done(function (translated) {
+            $('#translation_area').text(translated['text'])
             $('#loading').show();
-            $.post('/get_transmogrification_by_ajax', {
-                text: text_to_translate,
-                tfunction_index: $('input[name=radio-tfunction]:checked').val()-1
-            }).done(function (translated) {
-                $('#translation_area').text(translated['text'])
-                $('#loading').show();
-                 $('#loading').hide();
-            }).fail(function () {
-                $('#translation_area').text("Error: Could not contact server.");
-                $('#loading').hide();
-            });
-        }
-
-        function test_click_button() {
-            alert("testing!");
-            var radioValue = $("input[name='radio-paste']:checked").val();
-            if(radioValue){ alert("Your are a - " + radioValue); }
-        }
-
-        function clear_data_entry_and_result_areas() {
-            $('#data_entry_field').val('');
-            $('#translation_area').text('');
-        }
+            $('#loading').hide();
+        }).fail(function () {
+            $('#translation_area').text("Error: Could not contact server.");
+            $('#loading').hide();
+        });
+    }
 
 
+    function clear_data_entry_and_result_areas() {
+        $('#data_entry_field').val('');
+        $('#translation_area').text('');
+    }
 
-        $(function() {
-             $("#data_entry_field").bind("paste", function(e){
-                var radioValue = $("input[name='radio-paste']:checked").val();
-                if (radioValue == "Yes") {
-                    var pastedData = e.originalEvent.clipboardData.getData('text');
-                    translate(pastedData);
-                }
-            });
-            $("#data_entry_field").focus(function() {  // from https://stackoverflow.com/questions/5797539/jquery-select-all-text-from-a-textarea
-                var $this = $(this);
-                $this.select();
-                $this.mouseup(function() {   // "Work around Chrome's little problem"
-                    $this.unbind("mouseup"); // "Prevent further mouseup intervention"
-                    return false;
-                });
-            });
-            $('#submit_button').hide();
-            $('#submit_link' ).click(function() {
-                translate($('#data_entry_field').val());
-            });
-            $('#test_link' ).click(function() {
-                test_click_button();
-            });
-            $('#clear_link' ).click(function() {
-                clear_data_entry_and_result_areas();
-            });
-            $('#ajax_controls').show();
-            $('#test_link').hide();
-        })
-    </script>
 
+    $(function () {
+        $("#data_entry_field").bind("paste", function (e) {
+            var radioValue = $("input[name='radio_paste']:checked").val();
+            if (radioValue == "Yes") {
+                var pastedData = e.originalEvent.clipboardData.getData('text');
+                translate(pastedData);
+            }
+        });
+        $("#data_entry_field").focus(function () {  // from https://stackoverflow.com/questions/5797539/jquery-select-all-text-from-a-textarea
+            var $this = $(this);
+            $this.select();
+            $this.mouseup(function () {   // "Work around Chrome's little problem"
+                $this.unbind("mouseup"); // "Prevent further mouseup intervention"
+                return false;
+            });
+        });
+        $('#submit_button').show();
+        $('#submit_link').click(function () {
+            translate($('#data_entry_field').val());
+        });
+        $('#clear_link').click(function () {
+            clear_data_entry_and_result_areas();
+        });
+        $('#ajax_controls').show();
+        $('#test_link').hide();
+    })
+</script>
 
 
 {% endblock %}

@@ -42,12 +42,11 @@
         float:left;
         margin:20px 10px;
     }
-    #radio-paste-fieldset{
+    #radio_paste_fieldset{
         width:150px;
         height:30px;
         float:left;
         text-align:center;
-        clear:left;
     }
     #header_data_entry {
         width:100px;
