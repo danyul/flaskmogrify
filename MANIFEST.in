@@ -1,5 +1,6 @@
 include README.md
 include LICENSE
 include CHANGELOG.md
+include requirements*
 recursive-include flaskmogrify/templates *
 recursive-include flaskmogrify/static *
