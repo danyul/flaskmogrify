@@ -105,3 +105,4 @@ ENV/
 
 #IDE
 .idea/
+.vscode/settings.json
