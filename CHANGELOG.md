@@ -6,3 +6,6 @@ Initial Github publish.
 ## v0.0.12  _20200412_
 bumped some requirement versions. 
 other tweaks to try to get it working
+
+## v0.0.13  _20200412_
+manifest includes
