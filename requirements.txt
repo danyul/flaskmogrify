@@ -6,7 +6,7 @@ itsdangerous==0.24
 Jinja2==2.10.1
 MarkupSafe==1.0
 packaging==16.8
-pyYAML==3.12
+pyYAML==5.1
 six==1.10.0
 Werkzeug==0.12.2
 WTForms==2.1
