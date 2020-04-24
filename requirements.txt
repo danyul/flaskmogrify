@@ -1,7 +1,7 @@
 appdirs==1.4.3
 click==6.7
 Flask==1.0.0
-Flask-WTF==0.14.2
+Flask-WTF>=0.14.3
 itsdangerous==0.24
 Jinja2==2.10.1
 MarkupSafe==1.0
